@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Meu Extrato";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model List<BankingConciliation.Web.Models.TransactionModel>
+<div class="container">
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            <p>@ViewBag.Error</p>
+        </div>
+    }
+    @if (Model.Count == 0)
+    {
+        <div>
+            <p class="alert alert-info"> Você ainda não possui movimentos importados. <a href="/Home/NewImport"><b>Clique Aqui</b></a> para importar.</p>
+        </div>
+    }
+    else
+    {
+        <h2>Meu Extrato</h2>
+        <hr />
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="container">
+                    <h5><small>Saldo:</small></h5>
+                    <h2><small>R$&nbsp;</small> @ViewBag.Amount</h2>
+                    <h5><small>Últimos lançamentos</small></h5>
+                </div>
+            </li>
+
+            @foreach (var item in Model)
+            {
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-md-1">
+                            @if (item.Type == "CREDIT")
+                            {
+                                <h2><span class="glyphicon glyphicon-plus-sign text-success" aria-hidden="true"></span></h2>
+                            }
+                            else if (item.Type == "DEBIT")
+                            {
+                                <h2><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></h2>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <h4>@item.Description</h4>
+                            <h4>@item.Date.ToString("dd/MM/yyyy")</h4>
+                        </div>
+                        <div class="col-md-2">
+                            @if (item.Amount > 0)
+                            {
+                                <h4 class="text-success">@item.Amount.ToString("N")</h4>
+                            }
+                            else
+                            {
+                                <h4>@item.Amount.ToString("N")</h4>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</div>
